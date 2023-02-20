@@ -15,12 +15,12 @@ date_default_timezone_set("Africa/Lagos");
 class Database {
     private const host = "localhost";
     private const user = "root";
-    private const password = "";
+    private const password = "12345678";
     private const database = "fingerprint";
     private $connection;
 
     function __construct(){
-        $this->connection = new mysqli(self::host, self::user, self::password, self::database);
+        $this->connection = new mysqli(self::host, self::user, self::password, self::database, 3300);
         if (mysqli_connect_errno()) {
             printf("Connection Failed: %s\n",  mysqli_connect_errno());
             exit();

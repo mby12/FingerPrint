@@ -7,4 +7,6 @@
 
 namespace fingerprint;
 
-require("./src/html/home.html");
+$v = $_GET['v'] ?? 0;
+
+require($v == "2"? "./src/html/home_v2.html" :"./src/html/home.html");
