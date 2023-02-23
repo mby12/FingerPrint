@@ -8,7 +8,7 @@
 
 require_once(__DIR__ . "/" . "../vendor/autoload.php");
 
-$client = new Fingerprint\FingerPrintClient("fingerprint_engine:4134", [
+$client = new Fingerprint\FingerPrintClient("172.16.0.25:14134", [
     "credentials" => Grpc\ChannelCredentials::createInsecure(),
 ]);
 
@@ -33,7 +33,7 @@ function enroll_fingerprint($pre_fmd_string_array){
         return $enrolled_fmd->getBase64EnrolledFMD();
     }
     else {
-        return "enrollment failed" ;
+        return false;
     }
 }
 

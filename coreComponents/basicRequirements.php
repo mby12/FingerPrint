@@ -6,6 +6,7 @@
  */
 
 require_once("UrlEncode.php");
+require_once("db.php");
 require_once("fingerprint.php");
 require_once("fingerprint__controller.php");
 
