@@ -18,7 +18,7 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST');
 header("Access-Control-Allow-Headers: X-Requested-With");
 
-require_once("../coreComponents/basicRequirements.php");
+require_once("basicRequirements.php");
 require_once("db.php");
 
 
@@ -40,32 +40,9 @@ header("content-type: application/json");
 if (!empty($post_data = $_POST["data"]) || !empty($selectedCluster = $_POST["selected_cluster"]) || !empty($totalCluster = $_POST["total_cluster"])) {
     $selectedCluster = $_POST["selected_cluster"];
     $totalCluster = $_POST["total_cluster"];
-    // $selectedCluster = 2;
-    // $totalCluster = 2;
     $get_all_user = getAllUser($selectedCluster, $totalCluster);
     $fpController = new FingerprintController($selectedCluster);
     foreach ($get_all_user as $vall) {
-
-        // error_log(connection_aborted() ? "CANCELED $selectedCluster" : "GAK CANCEL $selectedCluster");
-        // switch (connection_status()) {
-        //     case CONNECTION_NORMAL:
-        //         $status = 'Normal';
-        //         break;
-        //     case CONNECTION_ABORTED:
-        //         $status = 'User Abort';
-        //         break;
-        //     case CONNECTION_TIMEOUT:
-        //         $status = 'Max Execution Time exceeded';
-        //         break;
-        //     case (CONNECTION_ABORTED & CONNECTION_TIMEOUT):
-        //         $status = 'Aborted and Timed Out';
-        //         break;
-        //     default:
-        //         $status = 'Unknown';
-        //         break;
-        // }
-
-        // error_log("CONNECTION STATE $status $selectedCluster");
         if (connection_aborted()) {
             exit;
         }

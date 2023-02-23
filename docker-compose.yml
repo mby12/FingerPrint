@@ -1,40 +1,40 @@
 version: '3.5'
 
 services:
-  fingerprint_engine_cluster:
-    image: dahirmuhammaddahir/grpc_fingerprint_engine
-    restart: unless-stopped
-    container_name: fingerprint_engine
-    networks:
-      - fingerprint_engine_net_new
-
-  fingerprint_engine_cluster_2:
-    image: dahirmuhammaddahir/grpc_fingerprint_engine
-    restart: unless-stopped
-    container_name: fingerprint_engine_cluster_2
-    networks:
-      - fingerprint_engine_net_new
-
-  fingerprint_engine_cluster_3:
-    image: dahirmuhammaddahir/grpc_fingerprint_engine
-    restart: unless-stopped
-    container_name: fingerprint_engine_cluster_3
-    networks:
-      - fingerprint_engine_net_new
-
-  # fingerprint_engine_cluster_4:
+  # fingerprint_engine_cluster:
   #   image: dahirmuhammaddahir/grpc_fingerprint_engine
   #   restart: unless-stopped
-  #   container_name: fingerprint_engine_cluster_4
+  #   container_name: fingerprint_engine_cluster
   #   networks:
   #     - fingerprint_engine_net_new
 
-  # fingerprint_engine_cluster_5:
+  # fingerprint_engine_cluster_2:
   #   image: dahirmuhammaddahir/grpc_fingerprint_engine
   #   restart: unless-stopped
-  #   container_name: fingerprint_engine_5
+  #   container_name: fingerprint_engine_cluster_2
   #   networks:
   #     - fingerprint_engine_net_new
+
+  # fingerprint_engine_cluster_3:
+  #   image: dahirmuhammaddahir/grpc_fingerprint_engine
+  #   restart: unless-stopped
+  #   container_name: fingerprint_engine_cluster_3
+  #   networks:
+  #     - fingerprint_engine_net_new
+
+  # # fingerprint_engine_cluster_4:
+  # #   image: dahirmuhammaddahir/grpc_fingerprint_engine
+  # #   restart: unless-stopped
+  # #   container_name: fingerprint_engine_cluster_4
+  # #   networks:
+  # #     - fingerprint_engine_net_new
+
+  # # fingerprint_engine_cluster_5:
+  # #   image: dahirmuhammaddahir/grpc_fingerprint_engine
+  # #   restart: unless-stopped
+  # #   container_name: fingerprint_engine_5
+  # #   networks:
+  # #     - fingerprint_engine_net_new
 
   fingerprint_client:
     image: r3y3s_fingerprint
@@ -42,15 +42,21 @@ services:
     ports:
       - 7547:80
     restart: unless-stopped
-    container_name: r3y3s_fingerprint_client
-    depends_on:
-      - fingerprint_engine
-    networks:
-      - fingerprint_engine_net_new
-      - fingerprint_client_net_new
+    container_name: fingerprint_cluster_controller
+    volumes:
+      - .:/var/www/html
+      - vendor:/var/www/html/vendor
+    # depends_on:
+    #   - fingerprint_engine_cluster
+    #   - fingerprint_engine_cluster_2
+    #   - fingerprint_engine_cluster_3
+    # networks:
+    #   - fingerprint_engine_net_new
+    #   - fingerprint_client_net_new
 
-networks:
-  fingerprint_engine_net_new:
-  fingerprint_client_net_new:
+# networks:
+#   fingerprint_engine_net_new:
+#   fingerprint_client_net_new:
 
-
+volumes:
+  vendor:

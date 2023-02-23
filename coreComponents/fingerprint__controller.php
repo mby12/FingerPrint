@@ -4,7 +4,7 @@ require_once(__DIR__ . "/" . "../vendor/autoload.php");
 class FingerprintController
 {
     private $client;
-    private $clusterArray = [1 => "fingerprint_engine:4134", 2 => "fingerprint_engine_2:4134"];
+    private $clusterArray = [1 => "172.16.0.25:14134"];
     public function __construct($cluster = 1)
     {
         if (!in_array($cluster, array_keys($this->clusterArray))) throw new Error("Invalid cluster id");

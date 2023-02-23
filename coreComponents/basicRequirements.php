@@ -5,7 +5,7 @@
  * About: I will tell you later
  */
 
-require_once("../coreComponents/UrlEncode.php");
-require_once("../coreComponents/fingerprint.php");
-require_once("../coreComponents/fingerprint__controller.php");
+require_once("UrlEncode.php");
+require_once("fingerprint.php");
+require_once("fingerprint__controller.php");
 
