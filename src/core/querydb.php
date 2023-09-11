@@ -10,12 +10,16 @@ namespace fingerprint;
 
 require_once("../core/Database.php");
 
-function setUserFmds($user_id, $index_finger_fmd_string, $middle_finger_fmd_string)
+function setUserFmds($user_id, $index_finger_fmd_string)
 {
     $myDatabase = new Database();
-    $sql_query = "update users set indexfinger=?, middlefinger=? where id=?";
-    $param_type = "ssi";
-    $param_array = [$index_finger_fmd_string, $middle_finger_fmd_string, $user_id];
+    /* INSERT INTO table_name (column1, column2, column3, ...)
+VALUES (value1, value2, value3, ...);
+ */
+    $sql_query = "insert into users (indexfinger) VALUES (?)";
+    // $sql_query = "update users set indexfinger=? where id=?";
+    $param_type = "s";
+    $param_array = [$index_finger_fmd_string];
     $affected_rows = $myDatabase->update($sql_query, $param_type, $param_array);
 
     if ($affected_rows > 0) {

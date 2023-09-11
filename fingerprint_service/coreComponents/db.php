@@ -34,8 +34,9 @@ class Database
             }
 
             $statement->execute();
+            // $statement->free_result();
             $sql_query_result = $statement->get_result();
-
+            error_log(json_encode(["sql_query_result" => $sql_query_result, "error" => mysqli_error($this->connection)]));
             if ($sql_query_result->num_rows > 0) {
                 while ($row = $sql_query_result->fetch_assoc()) {
                     $result_set[] = $row;
@@ -72,9 +73,32 @@ class Database
         }
     }
 
-    function execute()
+    function execute_count($sql_query)
     {
-        //pass
+        if ($result = $this->connection->query($sql_query)) {
+            $sql_query_result = $result->fetch_row();
+            return $sql_query_result[0];
+        }
+    }
+    function select2($sql_query, $sql_param_type = "", $param_array = array())
+    {
+        if ($result = $this->connection->query($sql_query)) {
+            $sql_query_result = $result->fetch_all(MYSQLI_ASSOC);
+            return $sql_query_result;
+        }
+    }
+    function execute($sql_query)
+    {
+        if ($statement = $this->connection->prepare($sql_query)) {
+            //pass
+            if (!empty($sql_param_type) && !empty($param_array)) {
+                $this->bindQueryParams($statement, $sql_param_type, $param_array);
+            }
+
+            $statement->execute();
+            $sql_query_result = $statement->get_result();
+            return $sql_query_result;
+        }
     }
 
     function update($sql_query, $sql_param_type = "", $param_array = array())
@@ -98,5 +122,10 @@ class Database
         }
 
         call_user_func_array(array($statement, 'bind_param'), $param_value_reference);
+    }
+
+    function __destruct()
+    {
+        $this->connection->close();
     }
 }

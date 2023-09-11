@@ -26,13 +26,15 @@ function getAllUser($clusterNumber = 1, $totalCluster = 1)
 {
     if ($clusterNumber < 1 || $totalCluster < 1) throw new Error("Minimum selected cluster or total cluster number is 1");
     $myDatabase = new Database();
-    $sql_query = "SELECT id, username, fullname, indexfinger FROM users WHERE indexfinger IS NOT NULL";
-    $count_result = $myDatabase->count($sql_query);
+    $sql_query = "SELECT COUNT(*) AS total FROM vw_fingerlist WHERE indexfinger IS NOT NULL";
+    $count_result = (int)$myDatabase->execute_count($sql_query);
+    // error_log(json_encode(["INI" => $count_result]));
     $perCluster = round($count_result / $totalCluster);
     $offset = $clusterNumber == 1 ? 0 : ($perCluster * ($clusterNumber - 1));
-    $sql_query_2 = "SELECT id, username, fullname, indexfinger FROM users WHERE indexfinger IS NOT NULL LIMIT $perCluster OFFSET $offset";
-    $fmds = $myDatabase->select($sql_query_2);
+    $sql_query_2 = "SELECT id, username, fullname,indexfinger FROM vw_fingerlist WHERE indexfinger IS NOT NULL LIMIT $perCluster OFFSET $offset";
+    $fmds = $myDatabase->select2($sql_query_2);
     error_log($sql_query_2);
+    error_log(json_encode(["result_data" => $fmds]));
     return $fmds;
 }
 

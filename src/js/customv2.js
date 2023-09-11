@@ -20,6 +20,11 @@ let then;
 // pause duration
 let delay;
 
+const total_cluster = 2;
+
+let is_enrolling_new = false;
+let enrolling_finger_index = 0;
+
 let FingerprintSdkTest = (function () {
     function FingerprintSdkTest() {
         let _instance = this;
@@ -52,7 +57,13 @@ let FingerprintSdkTest = (function () {
         this.sdk.onSamplesAcquired = function (s) {
             // Sample acquired event triggers this function
             console.log("onSamplesAcquired", s);
-            verifyFinger(s);
+            if (is_enrolling_new) {
+                add_fingerprint_(s);
+                enrolling_finger_index += 1;
+                move_finger_index();
+            } else {
+                verifyFinger(s);
+            }
             // storeSample(s);
         };
         this.sdk.onQualityReported = function (e) {
@@ -146,7 +157,47 @@ const stopTimer = function () {
     clearInterval(timer);
     run();
 }
-const total_cluster = 2;
+
+function add_fingerprint_(finger) {
+    const { type, deviceUid, sampleFormat, samples } = finger;
+    // verifyFinger(finger);
+    if (myReader.currentHand.index_finger.length < 4) {
+        const [{ Data: finger_data }] = JSON.parse(samples);
+        myReader.currentHand.addIndexFingerSample(finger_data);
+    }
+    if (myReader.currentHand.index_finger.length == 4) {
+        done_enroll();
+    }
+}
+
+async function done_enroll() {
+    // alert('ea');
+    // window.location.reload();
+
+    let data = myReader.currentHand.generateFullHand();
+    let successMessage = "Enrollment Successful!";
+    let failedMessage = "Enrollment Failed!";
+    let payload = `data=${data}`;
+
+    let xhttp = new XMLHttpRequest();
+
+    xhttp.onreadystatechange = function () {
+        if (this.readyState === 4 && this.status === 200) {
+            if (this.responseText === "success") {
+                console.log("SUKSES ADDED");
+                alert("aded");
+                // window.location.reload();
+            }
+            else {
+                showMessage(`${failedMessage} ${this.responseText}`);
+            }
+        }
+    };
+
+    xhttp.open("POST", "src/core/enroll.php", true);
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhttp.send(payload);
+}
 
 async function verifyFinger({ type, deviceUid, sampleFormat, samples }) {
     startTimer();
@@ -167,10 +218,25 @@ async function verifyFinger({ type, deviceUid, sampleFormat, samples }) {
     console.log("INI", finger_data);
     // const selected_cluster = 1;
     const array_of_request = [];
+    const response_ = [];
+    let data_coun_t;
+
+    function check_done(result) {
+        response_.push(result);
+        console.log(response_);
+        if (response_.length == total_cluster) {
+            if (response_.includes(false)) {
+                $("#finger_icon").attr('class', "text-center text-danger");
+                $("#result").html(`Finger not matched any user. scanned ${data_coun_t} data`);
+            }
+        }
+    }
+
     for (let current_cluster = 1; current_cluster <= total_cluster; current_cluster++) {
         const request = $.post("http://localhost:5556/coreComponents/verify_new.php", { data: finger_data, selected_cluster: current_cluster, total_cluster }, function (check_result) {
             console.log("FROM CLUSTER", current_cluster, check_result);
             const { success, data: user_data, data_count } = check_result;
+            data_coun_t = data_count;
             if (success) {
                 for (const iterator of array_of_request) {
                     console.log(`aborted find on cluster ${array_of_request.indexOf(iterator)}`);
@@ -181,6 +247,7 @@ async function verifyFinger({ type, deviceUid, sampleFormat, samples }) {
                 $("#result").html(`<span class="text-info fw-bold">User Found!</span> <br>User ID : ${id}<br> Username: ${username}<br> Fullname: ${fullname}<br>Worker: ${current_cluster}`)
                 console.log(`FOUND IN CLUSTER ${current_cluster}`);
             }
+            check_done(success);
 
         });
         array_of_request.push(request);
@@ -249,22 +316,16 @@ class Hand {
     constructor() {
         this.id = 0;
         this.index_finger = [];
-        this.middle_finger = [];
     }
 
     addIndexFingerSample(sample) {
         this.index_finger.push(sample);
     }
 
-    addMiddleFingerSample(sample) {
-        this.middle_finger.push(sample);
-    }
-
     generateFullHand() {
         let id = this.id;
         let index_finger = this.index_finger;
-        let middle_finger = this.middle_finger;
-        return JSON.stringify({ id, index_finger, middle_finger });
+        return JSON.stringify({ id, index_finger });
     }
 }
 
@@ -580,5 +641,21 @@ function serverIdentify() {
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhttp.send(payload);
 }
+
+function move_finger_index() {
+    $("#fp_grid").children().prop("class", "fa-solid fa-fingerprint finger-enroll fa-2xl").eq(enrolling_finger_index).addClass("fa-beat-fade").addClass("text-info");
+    for (let index = 0; index < enrolling_finger_index; index++) {
+        $("#fp_grid").children().eq(index).prop("class", "fa-solid fa-fingerprint finger-enroll text-success fa-2xl");
+    }
+}
+
+$("#add_new_user_trigger").click(function () {
+    is_enrolling_new = true;
+    enrolling_finger_index = 0;
+    const that = $(this);
+    $("#enroll_status_wrapper").show();
+    that.prop("disabled", true);
+    move_finger_index();
+});
 
 init();

@@ -25,7 +25,7 @@ services:
     ports:
       - 5556:80
     restart: unless-stopped
-    container_name: r3y3s_fingerprint_client
+    container_name: fingerprint_client_front
     depends_on:
       - fingerprint_engine
     networks:
