@@ -2,15 +2,15 @@
 
 class Database
 {
-    private const host = "host.docker.internal";
-    private const user = "root";
-    private const password = "12345678";
-    private const database = "fingerprint";
+    // private const host = "host.docker.internal";
+    // private const user = "main";
+    // private const password = "12345678";
+    // private const database = "fingerprint";
     private $connection;
 
     function __construct()
     {
-        $this->connection = new mysqli(self::host, self::user, self::password, self::database, 3300);
+        $this->connection = new mysqli("host.docker.internal", getenv("DB_USERNAME"), getenv("DB_PASSWORD"), getenv("DB_DATABASE"), getenv("DB_PORT"));
         if (mysqli_connect_errno()) {
             printf("Connection Failed: %s\n",  mysqli_connect_errno());
             exit();

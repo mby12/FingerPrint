@@ -7,6 +7,8 @@
 
 namespace fingerprint;
 
-$v = $_GET['v'] ?? 0;
+require_once "configs.php";
 
-require($v == "2"? "./src/html/home_v2.html" :"./src/html/home.html");
+$v = $_GET['v'] ?? "2";
+
+require_once ($v == "2"? "./src/html/home_v2.php" :"./src/html/home.html");

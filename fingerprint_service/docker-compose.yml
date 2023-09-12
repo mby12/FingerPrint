@@ -7,6 +7,8 @@ services:
       - 4134:4134
     restart: unless-stopped
     container_name: fingerprint_engine
+    env_file:
+      - ../.env
     networks:
       - fingerprint_engine_net
   
@@ -16,6 +18,8 @@ services:
     ports:
       - 5555:80
     restart: unless-stopped
+    env_file:
+      - ../.env
     container_name: r3y3s_fingerprint_client
     depends_on:
       - fingerprint_engine

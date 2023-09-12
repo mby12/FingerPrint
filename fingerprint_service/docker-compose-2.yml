@@ -3,21 +3,20 @@ version: '3.5'
 services:
   fingerprint_engine:
     image: dahirmuhammaddahir/grpc_fingerprint_engine
-    ports:
-      - 4134:4134
+    env_file:
+      - ../.env
     restart: unless-stopped
-    container_name: fingerprint_engine
     networks:
       - fingerprint_engine_net
 
-  fingerprint_engine_2:
-    image: dahirmuhammaddahir/grpc_fingerprint_engine
-    ports:
-      - 4135:4134
-    restart: unless-stopped
-    container_name: fingerprint_engine_2
-    networks:
-      - fingerprint_engine_net
+  # fingerprint_engine_2:
+  #   image: dahirmuhammaddahir/grpc_fingerprint_engine
+  #   ports:
+  #     - 4135:4134
+  #   restart: unless-stopped
+  #   container_name: fingerprint_engine_2
+  #   networks:
+  #     - fingerprint_engine_net
   
   fingerprint_client:
     image: r3y3s_fingerprint
@@ -28,6 +27,8 @@ services:
     container_name: fingerprint_client_front
     depends_on:
       - fingerprint_engine
+    env_file:
+      - ../.env
     networks:
       - fingerprint_engine_net
       - fingerprint_client_net

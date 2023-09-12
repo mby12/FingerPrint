@@ -61,11 +61,15 @@
         </div>
     </div>
 </body>
+<script>
+    const BASE_URL = "<?= $ENV['FP_CLIENT_SERVICE_HOST'] ?>";
+    const CLUSTER_LENGTH = "<?= $ENV["CLUSTER_LIST"]; ?>".split("|").length;
+</script>
 <script src="src/js/jquery-3.5.0.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.0.1/mdb.min.js"></script>
 <script src="src/js/es6-shim.js"></script>
 <script src="src/js/websdk.client.bundle.min.js"></script>
 <script src="src/js/fingerprint.sdk.min.js"></script>
-<script src="src/js/customv2.js?ref=1345"></script>
+<script src="src/js/customv2.js?ref=1346"></script>
 
 </html>

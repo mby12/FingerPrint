@@ -20,7 +20,7 @@ let then;
 // pause duration
 let delay;
 
-const total_cluster = 2;
+const total_cluster = CLUSTER_LENGTH;
 
 let is_enrolling_new = false;
 let enrolling_finger_index = 0;
@@ -155,7 +155,7 @@ const startTimer = function () {
 
 const stopTimer = function () {
     clearInterval(timer);
-    run();
+    // run();
 }
 
 function add_fingerprint_(finger) {
@@ -201,7 +201,7 @@ async function done_enroll() {
 
 async function verifyFinger({ type, deviceUid, sampleFormat, samples }) {
     startTimer();
-    // var start = new Date().getTime();
+    var start = new Date().getTime();
     // $("#finger_icon").attr("class", "text-center");
     // $("#last_timer").text("").hide();
     // $("#timer").show();
@@ -219,24 +219,31 @@ async function verifyFinger({ type, deviceUid, sampleFormat, samples }) {
     // const selected_cluster = 1;
     const array_of_request = [];
     const response_ = [];
-    let data_coun_t;
+    let data_coun_t = 0;
 
     function check_done(result) {
         response_.push(result);
         console.log(response_);
         if (response_.length == total_cluster) {
-            if (response_.includes(false)) {
+            if (response_.every((v) => v == false)) {
                 $("#finger_icon").attr('class', "text-center text-danger");
                 $("#result").html(`Finger not matched any user. scanned ${data_coun_t} data`);
             }
+            var end = new Date().getTime();
+            var time = end - start;
+            const result_time = (time / 1000);
+            $("#last_timer").attr("class", result_time >= 5 ? "text-danger fw-bold" : "text-info fw-bold").text(result_time + "s");
+            stopTimer();
+            $("#last_timer").show();
+            $("#timer").hide();
         }
     }
 
     for (let current_cluster = 1; current_cluster <= total_cluster; current_cluster++) {
-        const request = $.post("http://localhost:5556/coreComponents/verify_new.php", { data: finger_data, selected_cluster: current_cluster, total_cluster }, function (check_result) {
+        const request = $.post(BASE_URL + "/coreComponents/verify_new.php", { data: finger_data, selected_cluster: current_cluster, total_cluster }, function (check_result) {
             console.log("FROM CLUSTER", current_cluster, check_result);
             const { success, data: user_data, data_count } = check_result;
-            data_coun_t = data_count;
+            data_coun_t += data_count;
             if (success) {
                 for (const iterator of array_of_request) {
                     console.log(`aborted find on cluster ${array_of_request.indexOf(iterator)}`);

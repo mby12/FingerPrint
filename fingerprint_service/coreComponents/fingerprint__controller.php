@@ -4,11 +4,14 @@ require_once(__DIR__ . "/" . "../vendor/autoload.php");
 class FingerprintController
 {
     private $client;
-    private $clusterArray = [1 => "fingerprint_engine:4134", 2 => "fingerprint_engine_2:4134"];
+    // private $clusterArray = ["fingerprint_engine:4134", "fingerprint_engine_2:4134"];
     public function __construct($cluster = 1)
     {
-        if (!in_array($cluster, array_keys($this->clusterArray))) throw new Error("Invalid cluster id");
-        $this->client = new Fingerprint\FingerPrintClient($this->clusterArray[$cluster], [
+        $clusterArray = explode("|", getenv("CLUSTER_LIST"));
+        error_log(json_encode(["Cluster Array" => $clusterArray]));
+
+        // if (!in_array($cluster, array_keys($clusterArray))) throw new Error("Invalid cluster id");
+        $this->client = new Fingerprint\FingerPrintClient($clusterArray[(int)$cluster - 1], [
             "credentials" => Grpc\ChannelCredentials::createInsecure(),
         ]);
     }
