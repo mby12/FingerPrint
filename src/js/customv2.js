@@ -202,9 +202,9 @@ async function done_enroll() {
 async function verifyFinger({ type, deviceUid, sampleFormat, samples }) {
     startTimer();
     var start = new Date().getTime();
-    // $("#finger_icon").attr("class", "text-center");
-    // $("#last_timer").text("").hide();
-    // $("#timer").show();
+    $("#finger_icon").attr("class", "text-center");
+    $("#last_timer").text("").hide();
+    $("#timer").show();
 
     // {
     //     "type": "SamplesAcquired",
@@ -229,14 +229,14 @@ async function verifyFinger({ type, deviceUid, sampleFormat, samples }) {
                 $("#finger_icon").attr('class', "text-center text-danger");
                 $("#result").html(`Finger not matched any user. scanned ${data_coun_t} data`);
             }
-            var end = new Date().getTime();
-            var time = end - start;
-            const result_time = (time / 1000);
-            $("#last_timer").attr("class", result_time >= 5 ? "text-danger fw-bold" : "text-info fw-bold").text(result_time + "s");
-            stopTimer();
-            $("#last_timer").show();
-            $("#timer").hide();
         }
+        const end = new Date().getTime();
+        const time = end - start;
+        const result_time = (time / 1000);
+        $("#last_timer").attr("class", result_time >= 5 ? "text-danger fw-bold" : "text-info fw-bold").text(result_time + "s");
+        stopTimer();
+        $("#last_timer").show();
+        $("#timer").hide();
     }
 
     for (let current_cluster = 1; current_cluster <= total_cluster; current_cluster++) {
