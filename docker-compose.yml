@@ -25,10 +25,12 @@ services:
     networks:
       - fingerprint_engine_net
       - fingerprint_client_net
-  
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
   fingerprint_web:
     # image: nginx:latest
-    build: 
+    build:
       dockerfile: ./web-Dockerfile
     ports:
       - '8080:80'
