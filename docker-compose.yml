@@ -40,6 +40,8 @@ services:
       - fingerprint_engine_connector
     networks:
       - fingerprint_client_net
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   # php-fpm:
   #   image: php_fpm
