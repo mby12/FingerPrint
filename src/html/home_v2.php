@@ -70,6 +70,6 @@
 <script src="src/js/es6-shim.js"></script>
 <script src="src/js/websdk.client.bundle.min.js"></script>
 <script src="src/js/fingerprint.sdk.min.js"></script>
-<script src="src/js/customv2.js?ref=1346"></script>
+<script src="src/js/customv2.js"></script>
 
 </html>
