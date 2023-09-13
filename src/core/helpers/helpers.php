@@ -6,7 +6,7 @@
  * @date    2022-04-11 13:52:59
  * @version 1.0.0
  */
-require_once(__DIR__ . '/../../../configs.php');
+// require_once(__DIR__ . '/../../../configs.php');
 require_once('Requests/src/Autoload.php');
 WpOrg\Requests\Autoload::register();
 

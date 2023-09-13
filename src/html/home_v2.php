@@ -62,8 +62,8 @@
     </div>
 </body>
 <script>
-    const BASE_URL = "<?= $ENV['FP_CLIENT_SERVICE_HOST'] ?>";
-    const CLUSTER_LENGTH = "<?= $ENV["CLUSTER_LIST"]; ?>".split("|").length;
+    const BASE_URL = "http://192.168.2.1:5556";
+    const CLUSTER_LENGTH = +"<?= getenv("CLUSTER_SCALE"); ?>";
 </script>
 <script src="src/js/jquery-3.5.0.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.0.1/mdb.min.js"></script>

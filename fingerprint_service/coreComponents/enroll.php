@@ -14,10 +14,10 @@ if (!empty($_POST["data"])) {
 
     $index_finger_string_array = $user_data->index_finger;
     // $middle_finger_string_array = $user_data->middle_finger;
-
-    $enrolled_index_finger = enroll_fingerprint($index_finger_string_array);
+    $client = new FingerprintController();
+    $enrolled_index_finger = $client->enroll_fingerprint($index_finger_string_array);
     // $enrolled_middle_finger = enroll_fingerprint($middle_finger_string_array);
-    error_log(json_encode(["waduc" => $enrolled_index_finger]));
+    error_log(json_encode(["waduc" => $enrolled_index_finger,]));
     if ($enrolled_index_finger !== "enrollment failed") {
         # todo: return the enrolled fmds instead
         $output = ["enrolled_index_finger" => $enrolled_index_finger];

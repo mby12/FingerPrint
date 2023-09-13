@@ -23,9 +23,9 @@ class Database
 
     function __construct()
     {
-        global $ENV;
-        // $this->connection = new mysqli(getenv("DB_HOST"), getenv('DB_USERNAME'), getenv("DB_PASSWORD"), getenv('DB_DATABASE'), getenv("DB_PORT"));
-        $this->connection = new mysqli($ENV["DB_HOST"], $ENV['DB_USERNAME'], $ENV["DB_PASSWORD"], $ENV['DB_DATABASE'], $ENV["DB_PORT"]);
+        // global $ENV;
+        $this->connection = new mysqli(getenv("DB_HOST"), getenv('DB_USERNAME'), getenv("DB_PASSWORD"), getenv('DB_DATABASE'), getenv("DB_PORT"));
+        // $this->connection = new mysqli($ENV["DB_HOST"], $ENV['DB_USERNAME'], $ENV["DB_PASSWORD"], $ENV['DB_DATABASE'], $ENV["DB_PORT"]);
         if (mysqli_connect_errno()) {
             printf("Connection Failed: %s\n",  mysqli_connect_errno());
             exit();

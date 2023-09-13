@@ -1,0 +1,5 @@
+FROM dahirmuhammaddahir/secureng-php-apache
+
+WORKDIR /var/www/html
+
+COPY . .

@@ -1,0 +1,57 @@
+version: '3.5'
+
+services:
+  fingerprint_compare_engine:
+    image: dahirmuhammaddahir/grpc_fingerprint_engine
+    env_file:
+      - .env
+    restart: unless-stopped
+    deploy:
+      replicas: ${CLUSTER_SCALE}
+    networks:
+      - fingerprint_engine_net
+
+  fingerprint_engine_connector:
+    image: r3y3s_fingerprint
+    build: fingerprint_service
+    ports:
+      - 5556:80
+    restart: unless-stopped
+    container_name: fingerprint_engine_connector
+    depends_on:
+      - fingerprint_compare_engine
+    env_file:
+      - .env
+    networks:
+      - fingerprint_engine_net
+      - fingerprint_client_net
+  
+  fingerprint_web:
+    # image: nginx:latest
+    build: 
+      dockerfile: ./web-Dockerfile
+    ports:
+      - '8080:80'
+    env_file:
+      - .env
+    depends_on:
+      - fingerprint_engine_connector
+    networks:
+      - fingerprint_client_net
+
+  # php-fpm:
+  #   image: php_fpm
+  #   build: 
+  #     dockerfile: ./nginx-Dockerfile
+  #   env_file:
+  #     - .env
+  #   volumes:
+  #     - .:/var/www/html
+  #   networks:
+  #     - fingerprint_client_net
+
+
+networks:
+  fingerprint_engine_net:
+  fingerprint_client_net:
+

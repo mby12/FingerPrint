@@ -7,11 +7,11 @@ class FingerprintController
     // private $clusterArray = ["fingerprint_engine:4134", "fingerprint_engine_2:4134"];
     public function __construct($cluster = 1)
     {
-        $clusterArray = explode("|", getenv("CLUSTER_LIST"));
-        error_log(json_encode(["Cluster Array" => $clusterArray]));
+        // $clusterArray = explode("|", getenv("CLUSTER_LIST"));
+        // error_log(json_encode(["Cluster Array" => $clusterArray]));
 
         // if (!in_array($cluster, array_keys($clusterArray))) throw new Error("Invalid cluster id");
-        $this->client = new Fingerprint\FingerPrintClient($clusterArray[(int)$cluster - 1], [
+        $this->client = new Fingerprint\FingerPrintClient("fingerprint-engine-services-fingerprint_compare_engine-$cluster:4134", [
             "credentials" => Grpc\ChannelCredentials::createInsecure(),
         ]);
     }

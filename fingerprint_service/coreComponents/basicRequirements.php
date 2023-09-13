@@ -6,6 +6,6 @@
  */
 
 require_once("../coreComponents/UrlEncode.php");
-require_once("../coreComponents/fingerprint.php");
+// require_once("../coreComponents/fingerprint.php");
 require_once("../coreComponents/fingerprint__controller.php");
 

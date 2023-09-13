@@ -33,8 +33,6 @@ function getAllUser($clusterNumber = 1, $totalCluster = 1)
     $offset = $clusterNumber == 1 ? 0 : ($perCluster * ($clusterNumber - 1));
     $sql_query_2 = "SELECT id, username, fullname,indexfinger FROM vw_fingerlist WHERE indexfinger IS NOT NULL LIMIT $perCluster OFFSET $offset";
     $fmds = $myDatabase->select2($sql_query_2);
-    error_log($sql_query_2);
-    error_log(json_encode(["result_data" => $fmds]));
     return $fmds;
 }
 
