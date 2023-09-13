@@ -62,7 +62,7 @@
     </div>
 </body>
 <script>
-    const BASE_URL = "http://192.168.2.1:5556";
+    const BASE_URL = "<?= getenv("BASE_URL") ?>";
     const CLUSTER_LENGTH = +"<?= getenv("CLUSTER_SCALE"); ?>";
 </script>
 <script src="src/js/jquery-3.5.0.min.js"></script>
