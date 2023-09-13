@@ -43,6 +43,7 @@ if (!empty($post_data = $_POST["data"]) || !empty($selectedCluster = $_POST["sel
     // $selectedCluster = 2;
     // $totalCluster = 2;
     $get_all_user = getAllUser($selectedCluster, $totalCluster);
+    error_log(json_encode(['users' => $get_all_user]));
     $fpController = new FingerprintController($selectedCluster);
     foreach ($get_all_user as $vall) {
 
